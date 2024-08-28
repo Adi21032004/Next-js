@@ -3,10 +3,10 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcrypt';
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/user';
-import dotenv from 'dotenv'
-dotenv.config({
-  path: 'src/.env'
-})
+// import dotenv from 'dotenv'
+// dotenv.config({
+//   path: 'src/.env'
+// })
 
 export const authOptions: NextAuthOptions = {
   providers: [
