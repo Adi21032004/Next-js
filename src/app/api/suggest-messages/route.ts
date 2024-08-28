@@ -1,9 +1,6 @@
 import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
-import dotenv from 'dotenv'
-dotenv.config({
-    path: 'src/.env'
-})
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
