@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 // import { ClientOptions } from "openai/index.mjs";
 
-dotenv.config({
-    path: 'src/.env'
-})
+// dotenv.config({
+//     path: 'src/.env'
+// })
 type ConnectionObject = {
     isConnected?: number
 }
