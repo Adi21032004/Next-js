@@ -7,7 +7,7 @@ import UserModel from '@/model/user';
 // dotenv.config({
 //   path: 'src/.env'
 // })
-
+console.log()
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
