@@ -3,6 +3,9 @@ import UserModel from "@/model/user";
 import { z } from "zod";
 import { usernameValidate } from "@/schemas/signUpSchema";
 
+// Indicate that this route should run in a dynamic Node.js environment
+export const runtime = 'nodejs';
+
 //query schema
 const UsernameQuerySchema = z.object({
     username: usernameValidate
