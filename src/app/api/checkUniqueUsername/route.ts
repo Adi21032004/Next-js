@@ -4,7 +4,6 @@ import { z } from "zod";
 import { usernameValidate } from "@/schemas/signUpSchema";
 
 // Indicate that this route should run in a dynamic Node.js environment
-export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic'
 
 //query schema
