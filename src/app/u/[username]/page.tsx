@@ -8,7 +8,8 @@ import { Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { CardHeader, CardContent, Card } from '@/components/ui/card';
-import { useCompletion } from 'ai/react';
+// `ai/react` export not available in installed `ai` package version.
+// Use a simple fetch-based suggestion flow instead of the hook.
 import {
   Form,
   FormControl,
@@ -38,15 +39,9 @@ export default function SendMessage() {
   const params = useParams<{ username: string }>();
   const username = params.username;
 
-  const {
-    complete,
-    completion,
-    isLoading: isSuggestLoading,
-    error,
-  } = useCompletion({
-    api: '/api/suggest-messages',
-    initialCompletion: initialMessageString,
-  });
+  const [completion, setCompletion] = useState<string>(initialMessageString);
+  const [isSuggestLoading, setIsSuggestLoading] = useState(false);
+  const [suggestError, setSuggestError] = useState<Error | null>(null);
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -87,10 +82,18 @@ export default function SendMessage() {
   };
 
   const fetchSuggestedMessages = async () => {
+    setIsSuggestLoading(true);
+    setSuggestError(null);
     try {
-      complete('');
-    } catch (error) {
-      console.error('Error fetching messages:', error);
+      const res = await fetch('/api/suggest-messages', { method: 'POST' });
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+      const text = await res.text();
+      setCompletion(text || initialMessageString);
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+      setSuggestError(err as Error);
+    } finally {
+      setIsSuggestLoading(false);
     }
   };
 
@@ -149,8 +152,8 @@ export default function SendMessage() {
             <h3 className="text-xl font-semibold">Messages</h3>
           </CardHeader>
           <CardContent className="flex flex-col space-y-4">
-            {error ? (
-              <p className="text-red-500">{error.message}</p>
+            {suggestError ? (
+              <p className="text-red-500">{suggestError.message}</p>
             ) : (
               parseStringMessages(completion).map((message, index) => (
                 <Button
