@@ -16,16 +16,16 @@ export async function sendVerificationEmail(
         VerificationEmail({ username, otp: verifyCode })
         );
         console.log(process.env.EMAIL_USER)
-       const {data,error} = await transporter.sendMail({
+       const error = await transporter.sendMail({
         from: `"Feedback App" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: "Feedback | Verification Code",
         html
         });
-        if(error){
-            console.log("this is the error",error)
-            return { success: false, message: error.message };
-        }
+        // if(error){
+        //     console.log("this is the error",error)
+        //     return { success: false, message: error.message };
+        // }
         return {success: true,message: 'Verification email sent successfully'}
     } catch (error) {
         console.error("Error sending verification email",error)

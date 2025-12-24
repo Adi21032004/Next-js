@@ -24,7 +24,7 @@ function UserDashboard() {
   const { toast } = useToast();
 console.log(messages)
   const handleDeleteMessage = (messageId: string) => {
-    setMessages(messages.filter((message) => message._id !== messageId));
+    setMessages(messages.filter((message) => message._id.toString() !== messageId));
   };
 
   const { data: session } = useSession();
