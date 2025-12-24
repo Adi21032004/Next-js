@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 // import { ClientOptions } from "openai/index.mjs";
 
 // dotenv.config({
-//     path: 'src/.env'
+//     path: '/.env.local.example'
 // })
 type ConnectionObject = {
     isConnected?: number
@@ -15,24 +15,31 @@ const connection: ConnectionObject = {}
 
 const dbConnect = async() => {
     if (connection.isConnected){
-        console.log("Already connected ot database")
+        console.log("Already connected to database")
         return
     }
 
+    const uri = process.env.MONGODB_URI;
+    console.log(uri)
+    if (!uri) {
+        const msg = 'MONGODB_URI is not set. Please add it to .env.local (see .env.local.example)';
+        console.error(msg);
+        throw new Error(msg);
+    }
+
     try {
-        console.log(process.env.MONGODB_URI)
-        const db = await mongoose.connect(process.env.MONGODB_URI || '',{})
-        await mongoose.connection.db.admin().command({ping: 1})
-        console.log(db)//todo
+        console.log('Connecting to MongoDB...')
+        const db = await mongoose.connect(uri, {})
+        // await mongoose.connection.db
+        console.log(db) // todo
 
         connection.isConnected = db.connections[0].readyState
 
         console.log("DB Connected Successfully")
 
     } catch (error) {
-
-        console.log("Database connection failed",error)
-        process.exit(1)
+        console.error("Database connection failed", error)
+        throw error
     }
 }
 
